@@ -1,6 +1,5 @@
 import 'dart:io';
 
-//add this comment
 List<Map<String, dynamic>> products = [];
 
 /// current date timestamp
@@ -37,7 +36,7 @@ void getProduct() {
   input = null;
 
   // takes input from the user until it's a valid double value
-  while (double.tryParse(input ?? 'unknown') == null) {
+  while (double.tryParse(input ?? '') == null) {
     print('please enter price');
     input = stdin.readLineSync();
   }
@@ -94,13 +93,13 @@ void createOrder() {
 
   print('enter product id to select item');
   input = stdin.readLineSync() ?? '';
-  var selectedId = int.tryParse(input);
+  var selectedId = int.tryParse(input); // 5
 
   if (selectedId != null) {
     // get first product in our products list WHERE the product id is equal to the selected id
     selectedProduct = products.firstWhere(
       //  function returns bool value of which item you want
-          (product) => product['id'] == selectedId,
+      (product) => product['ID'] == selectedId,
       // this function runs when no product/element available in the list
       // if orElse is omitted, it throws an error
       orElse: () => {},
@@ -160,4 +159,31 @@ void main() {
   while (value) {
     value = startProgram() ?? true;
   }
+
+
+  Car myCar =  Car(color: 'white', width: 2, height: 2.5, engine: 'V6 2000cc');
+
+  myCar.color
+
+
 }
+
+String? engine;
+
+class Car {
+ String engine;
+ int doors;
+ double height;
+ double width;
+ String color;
+
+  Car({
+    required this.engine,
+    this.doors = 4,
+    required this.height,
+    required this. width,
+    required this. color,
+  });
+}
+
+
