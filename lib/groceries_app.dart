@@ -1,5 +1,6 @@
 import 'dart:io';
 
+//add this comment
 List<Map<String, dynamic>> products = [];
 
 /// current date timestamp
@@ -7,7 +8,7 @@ List<Map<String, dynamic>> products = [];
 /// timestamp is an integer refers to the current date and time in milliseconds
 int defaultId() => DateTime.now().millisecondsSinceEpoch;
 
-/// take product from user
+/// take product.dart from user
 void getProduct() {
   const defaultQuantity = 1;
 
@@ -15,7 +16,7 @@ void getProduct() {
 
   // holds the input data temporarily
   String? input;
-  print('please enter product name');
+  print('please enter product.dart name');
   product['name'] = stdin.readLineSync() ?? 'unknown';
 
   print('please enter id');
@@ -41,7 +42,7 @@ void getProduct() {
     input = stdin.readLineSync();
   }
 
-  // save the value to the product
+  // save the value to the product.dart
   product['price'] = double.parse(input!);
 
   print('please enter color');
@@ -50,11 +51,11 @@ void getProduct() {
   print('please enter size');
   product['size'] = stdin.readLineSync() ?? '';
 
-  // add the product to the list
+  // add the product.dart to the list
   products.add(product);
 }
 
-/// print the given product, and it prints the product stock by default
+/// print the given product.dart, and it prints the product.dart stock by default
 /// unless you set [showQuantity] true, it shows the quantity rather than stock
 void printProduct(Map<String, dynamic> product, {bool showQuantity = false}) {
   print(" ------- id: ${product['id']} ------- ");
@@ -91,28 +92,28 @@ void createOrder() {
   String input;
   Map<String, dynamic> selectedProduct = {};
 
-  print('enter product id to select item');
+  print('enter product.dart id to select item');
   input = stdin.readLineSync() ?? '';
   var selectedId = int.tryParse(input);
 
   if (selectedId != null) {
-    // get first product in our products list WHERE the product id is equal to the selected id
+    // get first product.dart in our products list WHERE the product.dart id is equal to the selected id
     selectedProduct = products.firstWhere(
       //  function returns bool value of which item you want
           (product) => product['id'] == selectedId,
-      // this function runs when no product/element available in the list
+      // this function runs when no product.dart/element available in the list
       // if orElse is omitted, it throws an error
       orElse: () => {},
     );
   }
 
-  // if we don't find the product end the function
+  // if we don't find the product.dart end the function
   if (selectedProduct.isEmpty) {
-    print('no product available with the given id');
+    print('no product.dart available with the given id');
     return;
   }
 
-  //-- we have the selected product, now it's time to get the quantity
+  //-- we have the selected product.dart, now it's time to get the quantity
   print('how many items do you want ? \tplease enter the quantity');
   input = stdin.readLineSync() ?? '';
 
@@ -124,7 +125,7 @@ void createOrder() {
     input = stdin.readLineSync() ?? '';
   }
 
-  // set the required quantity to the product, it will be user by the printProduct function
+  // set the required quantity to the product.dart, it will be user by the printProduct function
   selectedProduct['quantity'] = int.parse(input);
 
   // now we have a valid order, let's confirm with the user
@@ -140,7 +141,7 @@ void createOrder() {
 }
 
 bool? startProgram() {
-  print("press 'e' to add a new product or 'o' to create an order");
+  print("press 'e' to add a new product.dart or 'o' to create an order");
 
   String input = stdin.readLineSync() ?? '';
 
