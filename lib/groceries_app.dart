@@ -6,7 +6,7 @@ import 'product.dart';
 void main() {
   Map<int, Product> products = {};
   print('please enter a character ');
-  print('for adding enter a\nfor ordring enter o');
+  print('for adding enter a\nfor ordering enter o');
   print('if u want to increase quantity press q');
   var input = stdin.readLineSync() ?? '';
   input.toLowerCase();
@@ -21,10 +21,9 @@ void main() {
       print(products);
       getOrder(products);
     } else if (input == 'q') {
-      print(products);
       increment(products);
     } else {
-      print('please enter valid charcter');
+      print('please enter valid character');
       break;
     }
     print('please enter a character ');
