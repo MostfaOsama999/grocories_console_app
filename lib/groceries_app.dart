@@ -161,10 +161,6 @@ void main() {
   }
 
 
-  Car myCar =  Car(color: 'white', width: 2, height: 2.5, engine: 'V6 2000cc');
-
-  myCar.color
-
 
 }
 
