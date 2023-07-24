@@ -1,6 +1,10 @@
 import 'dart:io';
 
+import 'package:groceries_app/product.dart';
+
 List<Map<String, dynamic>> products = [];
+
+Product()
 
 /// current date timestamp
 ///
