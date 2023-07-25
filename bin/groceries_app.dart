@@ -1,162 +1,174 @@
+import 'dart:html';
 import 'dart:io';
 
-List<Map<String, dynamic>> products = [];
+class Product {
+  final int id;
+  final String name;
+  final String category;
+  late int stock;
+  final double price;
+  final String color;
+  final String size;
+  void decremeantStock(int theQuantity) {
 
-/// current date timestamp
-///
-/// timestamp is an integer refers to the current date and time in milliseconds
-int defaultId() => DateTime.now().millisecondsSinceEpoch;
+  this.stock-=theQuantity ;
 
-/// take product from user
-void getProduct() {
-  const defaultQuantity = 1;
+    }
 
-  Map<String, dynamic> product = {};
+  Product({
+    required this.id,
+    required this.name,
+    required this.category,
+    required this.stock,
+    required this.price,
+    required this.color,
+    required this.size,
+    
+  });
 
-  // holds the input data temporarily
-  String? input;
-  print('please enter product name');
-  product['name'] = stdin.readLineSync() ?? 'unknown';
-
-  print('please enter id');
-  input = stdin.readLineSync() ?? 'unknown';
-  // try to parse the given id to string, if it's null, get the default id
-  product['id'] = int.tryParse(input) ?? defaultId();
-
-  print('please enter category');
-  input = stdin.readLineSync() ?? 'unknown';
-  product['category'] = input;
-
-  print('please enter stock quantity');
-  input = stdin.readLineSync() ?? 'unknown';
-  // try to parse the given input to int, if it's null, set the default quantity
-  product['stock'] = int.tryParse(input) ?? defaultQuantity;
-
-  // important to reset the input
-  input = null;
-
-  // takes input from the user until it's a valid double value
-  while (double.tryParse(input ?? 'unknown') == null) {
-    print('please enter price');
-    input = stdin.readLineSync();
+  void printProduct({bool showQuantity = false}) {
+    print(" ------- id: $id ------- ");
+    print('\tName: $name');
+    if (showQuantity) {
+      print('\tQuantity: $stock');
+    } else {
+      print('\tStock: $stock');
+    }
+    print('\tPrice: $price EGP');
+    print('\tCategory: $category');
+    if (size.isNotEmpty) {
+      print('\tSize: $size');
+    }
+    if (color.isNotEmpty) {
+      print('\tColor: $color');
+    }
+    print('');
   }
-
-  // save the value to the product
-  product['price'] = double.parse(input!);
-
-  print('please enter color');
-  product['color'] = stdin.readLineSync() ?? '';
-
-  print('please enter size');
-  product['size'] = stdin.readLineSync() ?? '';
-
-  // add the product to the list
-  products.add(product);
 }
 
-/// print the given product, and it prints the product stock by default
-/// unless you set [showQuantity] true, it shows the quantity rather than stock
-void printProduct(Map<String, dynamic> product, {bool showQuantity = false}) {
-  print(" ------- id: ${product['id']} ------- ");
-  print('\tName: ${product['name']}');
-  if (showQuantity) {
-    print('\tQuantity: ${product['quantity']}');
-  } else {
-    print('\tStock: ${product['stock']}');
-  }
-  print('\tPrice: ${product['price']} EGP');
-  print('\tCategory: ${product['category']}');
-  if (product['size'] != '') {
-    print('\tSize: ${product['size']}');
-  }
-  if (product['color'] != '') {
-    print('\tColor: ${product['color']}');
-  }
-  print('');
-}
+class Store {
+  final List<Product> products = [];
 
-void createOrder() {
-  if (products.isEmpty) {
-    print('no items available :(');
-    // this return statement ends the function here
-    return;
-  }
+  int defaultId() => DateTime.now().millisecondsSinceEpoch;
 
-  print('available in store');
-  // prints all products we have
-  for (Map<String, dynamic> product in products) {
-    printProduct(product);
-  }
+  void addProduct() {
+    const defaultQuantity = 1;
 
-  String input;
-  Map<String, dynamic> selectedProduct = {};
+    print('please enter product name');
+    final name = stdin.readLineSync() ?? 'unknown';
 
-  print('enter product id to select item');
-  input = stdin.readLineSync() ?? '';
-  var selectedId = int.tryParse(input);
+    print('please enter id');
+    final input = stdin.readLineSync() ?? 'unknown';
+    final id = int.tryParse(input) ?? defaultId();
 
-  if (selectedId != null) {
-    // get first product in our products list WHERE the product id is equal to the selected id
-    selectedProduct = products.firstWhere(
-      //  function returns bool value of which item you want
-      (product) => product['id'] == selectedId,
-      // this function runs when no product/element available in the list
-      // if orElse is omitted, it throws an error
-      orElse: () => {},
+    print('please enter category');
+    final category = stdin.readLineSync() ?? 'unknown';
+
+    print('please enter stock quantity');
+    final stock = int.tryParse(stdin.readLineSync() ?? 'unknown') ?? defaultQuantity;
+
+    double price = 0;
+    while (price == 0) {
+      print('please enter price');
+      final input = stdin.readLineSync();
+      if (input != null) {
+        price = double.tryParse(input) ?? 0;
+      }
+    }
+
+    print('please enter color');
+    final color = stdin.readLineSync() ?? '';
+
+    print('please enter size');
+    final size = stdin.readLineSync() ?? '';
+
+    final product = Product(
+      id: id,
+      name: name,
+      category: category,
+      stock: stock,
+      price: price,
+      color: color,
+      size: size,
     );
+
+    products.add(product);
   }
 
-  // if we don't find the product end the function
-  if (selectedProduct.isEmpty) {
-    print('no product available with the given id');
-    return;
+  void createOrder() {
+    if (products.isEmpty) {
+      print('no items available :(');
+      return;
+    }
+
+    print('available in store');
+    for (final product in products) {
+      product.printProduct();
+    }
+
+    print('enter product id to select item');
+    final input = stdin.readLineSync() ?? '';
+    final selectedId = int.tryParse(input);
+
+    final selectedProduct = products.firstWhere(
+      (product) => product.id == selectedId,
+      orElse: () => Product(
+        id: -1,
+        name: '',
+        category: '',
+        stock: 0,
+        price: 0,
+        color: '',
+        size: '',
+      ),
+    );
+
+    if (selectedProduct.id == -1) {
+      print('no product available with the given id');
+      return;
+    }
+
+    print('how many items do you want ? \tplease enter the quantity');
+    final quantityInput = stdin.readLineSync() ?? '';
+    final quantity = int.tryParse(quantityInput) ?? 0;
+
+    if (quantity <= 0 || quantity > selectedProduct.stock) {
+      print('please enter a valid quantity');
+      print('the available quantity is: ${selectedProduct.stock}');
+      return;
+    }
+    else{
+      selectedProduct.decremeantStock(quantity);
+    }
+
+    selectedProduct.printProduct(showQuantity: true);
+    final total = quantity * selectedProduct.price;
+    print('\t Total price: $total EGP');
+    print("press 'c' to confirm");
+    final confirmInput = stdin.readLineSync() ?? '';
+    if (confirmInput == 'c' || confirmInput == 'C') {
+      selectedProduct.stock -= quantity;
+    }
   }
 
-  //-- we have the selected product, now it's time to get the quantity
-  print('how many items do you want ? \tplease enter the quantity');
-  input = stdin.readLineSync() ?? '';
+  void startProgram() {
+    print("press 'e' to add a new product or 'o' to create an order");
 
-  // make sure the input is a valid quantity
-  // input must be int, and must be less than stock quantity
-  while (int.tryParse(input) == null || int.parse(input) > selectedProduct['stock']) {
-    print('please enter a valid quantity');
-    print('the available quantity is: ${selectedProduct['stock']}');
-    input = stdin.readLineSync() ?? '';
+    final input = stdin.readLineSync() ?? '';
+
+    if (input == 'e' || input == 'E') {
+      addProduct();
+    } else if (input == 'o' || input == 'O') {
+      createOrder();
+    } else {
+      print('Invalid input');
+    }
   }
-
-  // set the required quantity to the product, it will be user by the printProduct function
-  selectedProduct['quantity'] = int.parse(input);
-
-  // now we have a valid order, let's confirm with the user
-  print('your order is:');
-  printProduct(selectedProduct, showQuantity: true);
-  var total = selectedProduct['quantity'] * selectedProduct['price'];
-  print('\t Total price: $total EGP');
-  print('press \'c\' to confirm');
-  input = stdin.readLineSync() ?? '';
-  if (input == 'c' || input == 'C') {
-    products.firstWhere((element) => element['id'] == selectedId)['stock'] -= selectedProduct['quantity'];
-  }
-}
-
-bool? startProgram() {
-  print("press 'e' to add a new product or 'o' to create an order");
-
-  String input = stdin.readLineSync() ?? '';
-
-  if (input == 'e' || input == 'E') {
-    getProduct();
-  } else if (input == 'o' || input == 'O') {
-    createOrder();
-  } else {
-    return false;
-  }
-  return null;
 }
 
 void main() {
-  bool value = true;
-  while (value) {
-    value = startProgram() ?? true;
+  final store = Store();
+  while (true) {
+    store.startProgram();
   }
 }
